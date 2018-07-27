@@ -1,0 +1,7 @@
+REPOSITORY                     TAG                 IMAGE ID            CREATED             SIZE
+docker-monolith/docker-1.log   latest              9b1254a7973d        4 minutes ago       115MB
+ubuntu                         16.04               7aa3602ab41e        17 hours ago        115MB
+hello-world                    latest              2cb0d9787c4d        2 weeks ago         1.85kB
+
+Образ - базовый слой, на основе которого создается контейнер. Образ нельзя перезаписать.
+контейнер - приложение, которое имеет необходимые для него антрибуты (имя, сеть, окружение, memory, CPU и т.д.)
