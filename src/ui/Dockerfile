@@ -1,6 +1,6 @@
 FROM alpine:3.7
 
-RUN apk add --update ruby=2.4.4 ruby-dev=2.4.4 build-base \
+RUN apk add --no-cache ruby=2.4.4-r0 ruby-dev=2.4.4-r0 build-base=0.5-r0 \
     && gem install bundler --no-ri --no-rdoc
 
 ENV APP_HOME /app
