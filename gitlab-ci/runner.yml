@@ -1,0 +1,21 @@
+---
+- name: Launch Gitlab Runner container
+  hosts: all
+  become: true
+  gather_facts: False
+  
+  tasks:
+  - name: Gitlab Runner container
+    docker_container:
+      name: gitlab-runner
+      image: gitlab/gitlab-runner:latest
+      state: started
+      restart: yes
+      restart_policy: always
+      volumes:
+        - /srv/gitlab-runner/config:/etc/gitlab-runner
+        - /var/run/docker.sock:/var/run/docker.sock
+
+  - name: Gitlab Runner container register
+  ## ALERT!! FAKE TOKEN
+    raw: docker exec -it gitlab-runner gitlab-runner register --non-interactive --executor "docker" --docker-image alpine:latest --url "http://35.189.228.73" --registration-token "ReallyTrueToken" --description "my-runner-2" --tag-list "linux,xenial,ubuntu,docker" --run-untagged --locked="false"
