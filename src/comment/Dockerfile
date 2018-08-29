@@ -1,5 +1,5 @@
 FROM ruby:2.2
-RUN apt-get update -qq && apt-get install -y --no-install-recommends build-essential && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -qq && apt-get install -y build-essential
 
 ENV APP_HOME /app
 RUN mkdir $APP_HOME
