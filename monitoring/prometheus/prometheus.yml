@@ -3,6 +3,16 @@ global:
   scrape_interval: '5s'
 
 scrape_configs:
+  - job_name: 'cloudprober'
+    static_configs:
+      - targets: 
+        - 'cloudprober:9313'
+
+  - job_name: 'mongo-exp'
+    static_configs:
+      - targets:
+        - 'mongodb_exporter:9216'
+
   - job_name: 'prometheus'
     static_configs:
       - targets:
@@ -17,3 +27,8 @@ scrape_configs:
     static_configs:
       - targets:
         - 'comment:9292'
+
+  - job_name: 'node'
+    static_configs:
+      - targets:
+        - 'node-exporter:9100'

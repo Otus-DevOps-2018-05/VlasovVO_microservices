@@ -88,6 +88,22 @@ python              3.6.0-alpine        cb178ebbf0f2        17 months ago       
 
 - Определили окружения
 
-Доп задания оставил на потом =( 
+Доп задания оставил на потом :worried:
 
+## HW№17
 
+- Ознакомился с мониторингом средствами prometheus
+
+- Ознакомился со сбором метрик состояния микросервисов
+
+- Ознакомился с экспортерами для сбора метрик хоста
+
+### Доп. задание:
+
+- В качестве мониторинга mongoDB использовал проект [percona/mongodb_exporter](https://github.com/percona/mongodb_exporter). Dockerfile расположен в директории `/monitoring/mongodb_exporter`
+
+- В качестве мониторига сервисов использовал [Cloudprober](https://github.com/google/cloudprober). Настроил на нем мониторинг портов в конфиг файле. Файлы расположены в директории `/monitoring/cloudprober`
+
+- Создал `makefile` для сбора и отправки на Docker Hub образов докера. Файл с входом на Docker Hub добавил в `.gitignore`
+
+Ссылка на Docker Hub: https://hub.docker.com/u/vlasovvo/
