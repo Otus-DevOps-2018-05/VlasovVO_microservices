@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   prometheus:
-    image: ${USERNAME}/prometheus:latest
+    image: ${USER_NAME}/prometheus:latest
     ports:
       - '9090:9090'
     volumes:
@@ -33,13 +33,13 @@ services:
         aliases:
           - node-exporter
   mongodb_exporter:
-    image: ${USERNAME}/mongodb_exporter:latest
+    image: ${USER_NAME}/mongodb_exporter:latest
     networks:
       reddit-backend:
         aliases:
           - mongodb_exporter
   cloudprober:
-    image: ${USERNAME}/cloudprober:latest
+    image: ${USER_NAME}/cloudprober:latest
     networks:
       reddit-frontend:
         aliases:
