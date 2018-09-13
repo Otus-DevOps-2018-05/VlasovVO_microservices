@@ -1,0 +1,115 @@
+version: '3.3'
+services:
+  prometheus:
+    image: ${USERNAME}/prometheus:latest
+    ports:
+      - '9090:9090'
+    volumes:
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention=1d'
+    networks:
+      reddit-frontend: 
+        aliases: 
+          - prometheus
+      reddit-backend: 
+        aliases: 
+          - prometheus
+  node-exporter:
+    image: prom/node-exporter:v0.15.2
+    user: root
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+    networks:
+      reddit-backend:
+        aliases:
+          - node-exporter
+  mongodb_exporter:
+    image: ${USERNAME}/mongodb_exporter:latest
+    networks:
+      reddit-backend:
+        aliases:
+          - mongodb_exporter
+  cloudprober:
+    image: ${USERNAME}/cloudprober:latest
+    networks:
+      reddit-frontend:
+        aliases:
+          - cloudprober
+  cadvisor:
+    image: google/cadvisor:v0.29.0
+    networks:
+      reddit-backend:
+        aliases:
+          - cadvisor
+      reddit-frontend:
+        aliases:
+          - cadvisor
+    volumes:
+      - '/:/rootfs:ro'
+      - '/var/run:/var/run:rw'
+      - '/sys:/sys:ro'
+      - '/var/lib/docker/:/var/lib/docker:ro'
+    ports:
+      - '8080:8080'
+  grafana:
+    image: grafana/grafana:5.0.0
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    networks:
+      reddit-frontend:
+        aliases:
+          - grafana
+  alertmanager:
+    image: ${USER_NAME}/alertmanager
+    command:
+    - '--config.file=/etc/alertmanager/config.yml'
+    ports:
+    - 9093:9093
+    networks:
+      reddit-frontend:
+        aliases:
+          - alertmanager
+  telegraf:
+    image: ${USER_NAME}/telegraf
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      reddit-frontend:
+        aliases:
+          - telegraf
+  influxdb:
+    image: influxdb
+    volumes:
+      - influxdb_data:/var/lib/influxdb
+    networks:
+      reddit-backend:
+        aliases:
+          - influxdb
+      reddit-frontend:
+        aliases:
+          - influxdb
+
+volumes:
+  prometheus_data:
+  grafana_data:
+  influxdb_data:
+
+networks:
+  reddit-frontend:
+  reddit-backend:
