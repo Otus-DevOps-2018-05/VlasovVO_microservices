@@ -16,3 +16,13 @@ VlasovVO microservices repository
 - `docker rm` - Удаление контейнера
 
 - `docker rmi` - Удаление образа
+
+## HW№13
+
+- Создали docker host на GCE
+
+- Собрали свой docker образ
+
+- Загрузили образ на Docker hub
+
+- Выполнено доп. задание
