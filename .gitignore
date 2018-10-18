@@ -7,3 +7,4 @@ variables.json
 .env
 .make_env
 variables.tf
+tls.*
