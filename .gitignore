@@ -8,3 +8,4 @@ variables.json
 .make_env
 variables.tf
 tls.*
+/Gitlab_ci

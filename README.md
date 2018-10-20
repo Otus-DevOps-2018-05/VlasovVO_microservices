@@ -180,3 +180,11 @@ python              3.6.0-alpine        cb178ebbf0f2        17 months ago       
 
 - Создан файл `ui-ingress-secret.yml` описывающий создание секрета в ui-ingress
 - Файл `mongo-network-policy.yml` обновлен для доступа к mongo post-сервиса
+
+## HW№23
+
+- Изучен способ развертывания кластера с помощью Helm
+
+- Развернул Gitlab в kubernetes кластере
+
+- Запуск CI/CD в kubernetes
