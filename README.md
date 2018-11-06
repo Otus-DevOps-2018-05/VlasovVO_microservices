@@ -81,3 +81,13 @@ python              3.6.0-alpine        cb178ebbf0f2        17 months ago       
 - Создан playbook для создания runner контейнера и подключения его к Gitlab CI
 
 - Канал для оповещений в Slack: <https://devops-team-otus.slack.com/messages/CB49LM39T>
+
+## HW№16
+
+- Расширил существующий пайплайн в Gitlab
+
+- Определили окружения
+
+Доп задания оставил на потом =( 
+
+
