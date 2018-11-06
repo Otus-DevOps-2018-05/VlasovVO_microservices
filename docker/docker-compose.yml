@@ -7,7 +7,8 @@ services:
     networks:
       reddit-backend: 
         aliases: 
-          - db
+          - post_db
+          - comment_db
   ui:
     image: '${USERNAME}/ui:${UI_VERSION}'
     ports:
@@ -52,6 +53,33 @@ services:
       reddit-backend: 
         aliases: 
           - prometheus
+  node-exporter:
+    image: prom/node-exporter:v0.15.2
+    user: root
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+    networks:
+      reddit-backend:
+        aliases:
+          - node-exporter
+  mongodb_exporter:
+    image: ${USERNAME}/mongodb_exporter:latest
+    networks:
+      reddit-backend:
+        aliases:
+          - mongodb_exporter
+  cloudprober:
+    image: ${USERNAME}/cloudprober:latest
+    networks:
+      reddit-frontend:
+        aliases:
+          - cloudprober
 
 volumes:
   post_db:
