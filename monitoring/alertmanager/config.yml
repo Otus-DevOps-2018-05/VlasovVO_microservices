@@ -1,0 +1,25 @@
+global:
+  slack_api_url: 'https://hooks.slack.com/services/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'
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_auth_username: 'address@gmail.com'
+  smtp_auth_password: 'true_password'
+  smtp_from: 'address@gmail.com'
+  smtp_require_tls: true
+  smtp_hello: 'Docker-host3'
+
+route:
+  receiver: 'slack-notifications'
+  routes:
+    - match:
+      continue: true
+      receiver: 'slack-notifications'
+    - match:
+      receiver: 'mail'
+
+receivers:
+- name: 'slack-notifications'
+  slack_configs:
+  - channel: '#vasily_vlasov'
+- name: 'mail'
+  email_configs:
+    - to: 'secret@bk.ru'

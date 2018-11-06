@@ -4,7 +4,7 @@ export $(shell sed 's/=.*//' $(cnf))
 
 .DEFAULT_GOAL := build-all
 
-build-all: build-prometheus build-mongodb_exporter build-comment build-ui build-post build-cloudprober
+build-all: build-prometheus build-mongodb_exporter build-comment build-ui build-post build-cloudprober build-alertmanager
 
 build-cloudprober:
 	cd $(REPO)/monitoring/cloudprober && docker build -t $(USER)/cloudprober:latest .
@@ -23,6 +23,9 @@ build-ui:
 
 build-post:
 	cd $(REPO)/src/post-py && bash docker_build.sh
+
+build-alertmanager:
+	cd $(REPO)/monitoring/alertmanager && docker build -t $(USER)/alertmanager:latest .
 
 push-all: push-prometheus push-mongodb_exporter push-comment push-ui push-post push-cloudprober
 
@@ -43,3 +46,6 @@ push-ui:
 
 push-post:
 	echo $(D_HUB_PASS) | docker login -u $(USER) --password-stdin && docker push $(USER)/post
+
+push-alertmanager:
+	echo $(D_HUB_PASS) | docker login -u $(USER) --password-stdin && docker push $(USER)/alertmanager
