@@ -2,7 +2,7 @@
 
 VlasovVO microservices repository
 
-## HW№12
+## HW№11
 
 - Запустили контейнер `docker run hello-world`, образ докера был скачен из Docker Hub
 
@@ -18,7 +18,7 @@ VlasovVO microservices repository
 
 - `docker rmi` - Удаление образа
 
-## HW№13
+## HW№12
 
 - Создали docker host на GCE
 
@@ -28,7 +28,7 @@ VlasovVO microservices repository
 
 - Выполнено доп. задание
 
-## HW№14
+## HW№13
 
 - Скачали архив с исходниками. Добавили dockerfile. **UI** собирается не с первого шага, т.к. содержит такие же промежуточные слои вначале что и **Comment**.
 
@@ -60,7 +60,7 @@ ruby                2.2                 6c8e6f9667b2        3 months ago        
 python              3.6.0-alpine        cb178ebbf0f2        17 months ago        88.6MB
 ```
 
-## HW№15
+## HW№14
 
 - Добавлены имена сетей и сетевых алиасов в docker-compose
 
@@ -69,3 +69,15 @@ python              3.6.0-alpine        cb178ebbf0f2        17 months ago       
 ### Доп. задание
 
 - Добавлен docker-compose.override.yml
+
+## HW№15
+
+- Развернут сервер с docker с помощью docker-machine
+
+- Развернули Gitlab CI с помощью docker-compose
+
+### Доп задание
+
+- Создан playbook для создания runner контейнера и подключения его к Gitlab CI
+
+- Канал для оповещений в Slack: <https://devops-team-otus.slack.com/messages/CB49LM39T>
