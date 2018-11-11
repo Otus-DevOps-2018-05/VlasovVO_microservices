@@ -1,0 +1,56 @@
+version: '3.3'
+services:
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      reddit-backend:
+        aliases:
+          - zipkin
+      reddit-frontend:
+        aliases:
+          - zipkin
+
+  fluentd:
+    image: ${USER_NAME}/fluentd
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    networks:
+      reddit-backend:
+        aliases:
+          - fluentd
+      reddit-frontend:
+        aliases:
+          - fluentd
+
+  elasticsearch:
+    image: elasticsearch
+    expose:
+      - 9200
+    ports:
+      - "9200:9200"
+    networks:
+      reddit-backend:
+        aliases:
+          - elasticsearch
+      reddit-frontend:
+        aliases:
+          - elasticsearch
+
+  kibana:
+    image: kibana
+    ports:
+      - "5601:5601"
+    networks:
+      reddit-backend:
+        aliases:
+          - kibana
+      reddit-frontend:
+        aliases:
+          - kibana
+
+networks:
+  reddit-frontend:
+  reddit-backend:
