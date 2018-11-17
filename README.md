@@ -157,3 +157,17 @@ python              3.6.0-alpine        cb178ebbf0f2        17 months ago       
 - Пройден туториал [k8s the hard way](https://github.com/kelseyhightower/kubernetes-the-hard-way). После прохождения был удален кластер
 
 - Проверены деплоймент файлы из директории `kubernetes/reddit`
+
+## HW№21
+
+- Изучена утилита minikube
+
+- Создан GKE кластер
+
+- Развернуто reddit приложение на GKE
+
+### Доп. задание
+
+- Добавлен файл `/kubernetes/terraform/main.tf` для разворачивания GKE средствами terraform
+
+- Добавлен файл `clusterrole-kubernetes-dashboard.yml` для выдачи прав serviceacount kubernetes-dashboard
