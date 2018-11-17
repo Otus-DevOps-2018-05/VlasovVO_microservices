@@ -171,3 +171,12 @@ python              3.6.0-alpine        cb178ebbf0f2        17 months ago       
 - Добавлен файл `/kubernetes/terraform/main.tf` для разворачивания GKE средствами terraform
 
 - Добавлен файл `clusterrole-kubernetes-dashboard.yml` для выдачи прав serviceacount kubernetes-dashboard
+
+## HW№22
+
+- Изучены настройки балансировки, сетевого взаимодействия и подключение удаленных хранилищ
+
+### Доп. Задание
+
+- Создан файл `ui-ingress-secret.yml` описывающий создание секрета в ui-ingress
+- Файл `mongo-network-policy.yml` обновлен для доступа к mongo post-сервиса
