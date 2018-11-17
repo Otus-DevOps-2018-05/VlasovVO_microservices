@@ -1,0 +1,20 @@
+comment:
+  image:
+    repository: vlasovvo/comment
+    tag: logging
+  service:
+    externalPort: 9292
+
+post:
+  image:
+    repository: vlasovvo/post
+    tag: logging
+    service:
+      externalPort: 5000
+
+ui:
+  image:
+    repository: vlasovvo/ui
+    tag: logging
+    service:
+      externalPort: 9292
