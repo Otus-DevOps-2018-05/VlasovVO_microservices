@@ -188,3 +188,184 @@ python              3.6.0-alpine        cb178ebbf0f2        17 months ago       
 - Развернул Gitlab в kubernetes кластере
 
 - Запуск CI/CD в kubernetes
+
+## HW№24
+
+- Установим prometeus на k8s
+
+- Включим kube-service-metrics:
+
+```yml
+kubeStateMetrics:
+  enabled: true
+```
+
+- Включим node-exporter:
+
+```yml
+nodeExporter:
+  enabled: true
+```
+
+- Установим прилолжение на разные namespace:
+
+```bash
+helm upgrade reddit-test ./reddit --install
+helm upgrade production --namespace production ./reddit --install
+helm upgrade staging --namespace staging ./reddit --install
+```
+
+- Разобьем собранный в ходе выполнения ДЗ job `reddit-endpoint` на 3 разных job'a:
+
+```yml
+      - job_name: 'post-endpoints'
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_service_label_(.+)
+          - source_labels: [__meta_kubernetes_service_label_app]
+            action: keep
+            regex: reddit
+          - source_labels: [__meta_kubernetes_service_label_component]
+            action: keep
+            regex: post
+          - source_labels: [__meta_kubernetes_namespace]
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_service_name]
+            target_label: kubernetes_name
+
+      - job_name: 'comment-endpoints'
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_service_label_(.+)
+          - source_labels: [__meta_kubernetes_service_label_app]
+            action: keep
+            regex: reddit
+          - source_labels: [__meta_kubernetes_service_label_component]
+            action: keep
+            regex: comment
+          - source_labels: [__meta_kubernetes_namespace]
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_service_name]
+            target_label: kubernetes_name
+
+      - job_name: 'ui-endpoints'
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_service_label_(.+)
+          - source_labels: [__meta_kubernetes_service_label_app]
+            action: keep
+            regex: reddit
+          - source_labels: [__meta_kubernetes_service_label_component]
+            action: keep
+            regex: ui
+          - source_labels: [__meta_kubernetes_namespace]
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_service_name]
+            target_label: kubernetes_name
+```
+
+- Установим Grafana
+
+- Установим новый [Дашборд](https://grafana.com/dashboards/315) для kubernetes
+
+- Добавим старые дашборды, добавим в них переменную namespace, Исправим формулы в графах с учетом добавленной переменной
+  Новый дашборды будет лежать в директории `kubernetes/dashboadrds`
+
+### Первое доп задание
+
+- Добавим alertrules в `customvalues.yml`:
+
+```yml
+serverFiles:
+  alerts:
+    groups:
+    - name: alert.rules
+      rules:
+      - alert: InstanceDown
+        expr: up{job=~"kubernetes-nodes"} == 0
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          description: '{{ $labels.kubernetes_io_hostname }} of job {{ $labels.job }} has been down for more than 1 minute'
+          summary: 'Instance {{ $labels.instance }} down'
+      - alert: APIserverDown
+        expr: up{job=~"kubernetes-apiservers"} == 0
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          description: 'APIserver has been down for more than 1 minute'
+```
+
+Включаем `alertmanager`:
+
+```yml
+alertmanager:
+  enabled: true
+```
+
+Заносим конфиг для `alertmanager` в custom_values.yml:
+
+```yml
+alertmanagerFiles:
+  alertmanager.yml: # |-
+    global:
+      slack_api_url: 'https://hooks.slack.com/services/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'
+
+    receivers:
+      - name: default-receiver
+        slack_configs:
+         - channel: '#vasily_vlasov'
+           send_resolved: true
+
+    route:
+      group_wait: 10s
+      group_interval: 5m
+      receiver: default-receiver
+      repeat_interval: 3h
+```
+
+Обновляем `prometheus` и получаем оповещения в slack:
+
+![slack](http://ipic.su/img/img7/fs/Novyjtochechnyjrisunok(2).1540405172.png)
+
+### Доп. задание 2
+
+Возможно не самый правильный вариант, но самый быстрый.
+
+- Скачиваем чарт `kibana` 0.0.1 весрии
+
+```bash
+helm fetch --untar stable/kibana --version 0.0.1
+```
+
+- В скаченную директорию `./Charts/kibana/temlate` переносим yaml файлы c созданием Elasticsearch и fluentd
+
+- Вносим изменения в value.yaml описанные в ДЗ:
+
+```yml
+ingress:
+  enabled: true
+  hosts:
+    - reddit-kibana
+```
+
+```yml
+env:
+  ELASTICSEARCH_URL: http://elasticsearch-logging:9200
+```
+
+- Переименуем папку `kibana` на `efk` и запускаем из данной директории чарт:
+
+```bash
+helm upgrade efk . -f value.yaml --install
+```
+
+- Стек запущен
